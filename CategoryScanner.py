@@ -33,9 +33,7 @@ class CategoryScanner:
         return productsList
 
     def getCategoryTradeVolume(self, categoryPageLink):
-
         categoryTradeVolume = 0
-
         while self.moreBoughtProductsAhead == True:
             sortedProductsPageLink = self.getSortedProductsPageLink(categoryPageLink, self.pageNumber)
             print "Downloading page: ", sortedProductsPageLink
@@ -54,10 +52,7 @@ class CategoryScanner:
                     self.moreBoughtProductsAhead = False
             else:
                 self.moreBoughtProductsAhead = False
-
         return categoryTradeVolume
-
-        return 0
 
     def getCategoryMaskValues(self, categoryPageSoup, categoryPageLink ):
         #filters = categoryPageSoup.findAll('a', attrs= { 'class' : 'param-toggle filter' })
