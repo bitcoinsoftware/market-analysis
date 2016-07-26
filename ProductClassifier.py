@@ -28,6 +28,7 @@ class ProductClassifier:
             for param in params:
                 if param.span != None:
                     try:
+                        #print param.span.text
                         result.append(str( param.span.text ))
                     except:
                         print "ERROR: ", param.span
@@ -63,8 +64,10 @@ class ProductClassifier:
     def getSubjectName(self, productSoup):
         soup = BeautifulSoup.BeautifulSoup(str(productSoup))
         title = soup.find('div', attrs = { 'class' : 'offer-info' }).find('a').text
-        print title
         return title
 
     def getValues(self):
         return (self.priceVal, self.categoryVal, self.subjectVal, self.paramsVal)
+
+    def getProductInfo(self):
+        return "Price %d [PLN], category number %d, auction subject value %d , auction params value %d" % self.getValues()

@@ -23,7 +23,11 @@ class VolumeCounter:
     def getPrice(self, articleSoup):
         priceDiv = articleSoup.find('div' , attrs={'class' : 'offer-price'})
         statementSpan = priceDiv.find('span' , attrs={'class' : 'statement'})
-        priceStr = supportFunctions.deleteNotNumeric(statementSpan.text)
+        text = statementSpan.text
+        #i =  text.find("original")
+        #if i!=-1: text=text[:i]
+        #priceStr = supportFunctions.deleteNotNumeric(statementSpan.text)
+        priceStr = supportFunctions.parseFirstNumber(statementSpan.text)
         if len(priceStr)>0:
             return float(priceStr)
         else:
@@ -34,9 +38,9 @@ class VolumeCounter:
         productTradeVolume = 0
         for product in listOfProductsOnPage:
             productTradeVolume = self.getProductTradeVolume(product)
-            productClassifier = ProductClassifier(product, price = self.getPrice(product), categoryLink = categoryLink)
-            productCoordinates = productClassifier.getValues()
-            print productCoordinates
+            #productClassifier = ProductClassifier(product, price = self.getPrice(product), categoryLink = categoryLink)
+            #productCoordinates = productClassifier.getValues()
+            #print productClassifier.getProductInfo()
             tradeVolume += productTradeVolume
         #lastProductSold = self.getBidAmount(listOfProductsOnPage[-1].find('span', attrs={'class' : 'bid-count'}))
         return productTradeVolume > 0, tradeVolume

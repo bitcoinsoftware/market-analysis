@@ -11,6 +11,7 @@ class CategoryTree:
         self.searchAim = 'a'
         self.aimLevels2 = ['alleLink lvl0', 'alleLink lvl1', 'alleLink lvl2', 'alleLink lvl3', 'alleLink lvl4', 'alleLink lvl5']
         #self.aimLevels2 = ['alleLink lvl1', 'alleLink lvl2']#, 'alleLink lvl3', 'alleLink lvl4', 'alleLink lvl5']
+        self.leafesLinks=[]
 
     def getCategoryLinks(self, categoryPageContent, aim):
         soup = BeautifulSoup.BeautifulSoup(categoryPageContent)
@@ -79,24 +80,26 @@ class CategoryTree:
         return  mainTree
 
     def addOrderMarks(self, tree, prefix=''):
-        #print "PREFIX :", prefix
         if len(tree.keys())>1 or tree.keys()[0]=='root':
             i = 0
             for key in tree.keys():
                 if key!='i' and key!='orderMark' :
-                    #try:
-                    #    print key
                     tree[key]['orderMark'] = prefix + str(unichr(i))
                     tree[key] = self.addOrderMarks(tree[key], tree[key]['orderMark'])
-                    #except:
-                    #    print "ERROR"
-                    #    #print tree[key]
-                    #    exit()
                     i += 1
         return tree
 
     def getTreeWithOrderMarks(self, tree):
         return self.addOrderMarks(tree)
+
+    #Return links to the lowest level category 
+    def findLeafCategories(categoryTreeJson):
+        for key in categoryTreeJson.keys():
+            subTree = categoryTreeJson[key]
+            if subTree.keys() == [u'i', u'orderMark']: #if it's the lowest level
+                self.leafesLinks.append(key)
+            else:
+                self.findLeafCategories(subTree)
 
 
 if __name__ == '__main__':
@@ -104,9 +107,9 @@ if __name__ == '__main__':
     cs = CategoryTree()
     allegroCategoryMapUrl = 'http://allegro.pl/category_map.php'
     outputFile = 'category_map.html'
-    fileNameUrl = str(datetime.datetime.now())
+    #fileNameUrl = str(datetime.datetime.now())
     print "DOWNLOADING PAGE CONTENT"
-    pageContent = supportFunctions.downloadWebPageContent(allegroCategoryMapUrl, fileNameUrl)
+    pageContent = supportFunctions.downloadWebPageContent(allegroCategoryMapUrl)#, fileNameUrl)
     print "TREE CREATION"
     finalDict = cs.getCategoryTree(pageContent)
     print "INSERTING ORDER MARKS"
@@ -114,4 +117,8 @@ if __name__ == '__main__':
 
     with open("categoryMap.dat", "w") as f:
         f.write(json.dumps(finalDict))
-    pprint (finalDict)
+
+#    cs.findLeafCategories(finalDict)
+
+    
+    

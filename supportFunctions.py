@@ -19,3 +19,14 @@ def deleteNotNumeric(text):
         if letter.isdigit() or letter == '.':
             newText += letter
     return newText
+
+def parseFirstNumber(text):
+    text = text.replace("6&nbsp;", "").replace(',', '.')
+    newText, digitFound = "", False
+    for letter in text:
+        if letter.isdigit() or letter == '.':
+            newText += letter
+            digitFound = True
+        elif digitFound == True and not (letter.isdigit() or letter == '.'):
+            return newText
+    return newText

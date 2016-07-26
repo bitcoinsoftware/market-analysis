@@ -69,6 +69,7 @@ class CategoryScanner:
 
 if __name__ == '__main__':
     cs = CategoryScanner()
-    tradeVolume = cs.getCategoryTradeVolume('http://allegro.pl/akcesoria-biurowe-dziurkacze-64641')
+    categoryUrl = 'http://allegro.pl/akcesoria-biurowe-dziurkacze-64641'
+    tradeVolume = cs.getCategoryTradeVolume(categoryUrl)
 
-    print tradeVolume
+    print "Wolumen sprzedazy %s z dzialu %s "% (tradeVolume, categoryUrl)
