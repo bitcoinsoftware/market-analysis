@@ -5,3 +5,6 @@ Project_Default.xml
 vcs.xml
 dbnavigator.xml
 modules.xml
+.idea
+*.pyc
+*.swp
