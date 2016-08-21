@@ -1,13 +1,17 @@
 import supportFunctions
-from income_analyzer.AbstractProductAnalyzer import AbstractProductAnalyzer
+from market_analysis.webpage_parser.AbstractProductParser import AbstractProductParser
 
 
-class AliexpressProductAnalyzer(AbstractProductAnalyzer):
+class AliexpressProductParser(AbstractProductParser):
     def __init__(self):
-        AbstractProductAnalyzer.__init__(self)
+        AbstractProductParser.__init__(self)
 
-    def _getBidAmount(self, articleSoup):
-        ordersHtml = articleSoup.find('em', attrs={'title': 'Total Orders'})
+    def _fetchName(self, productHtml):
+        nameHtml = productHtml.find('a', attrs={'class': 'product '})
+        return nameHtml['title']
+
+    def _fetchOrders(self, productHtml):
+        ordersHtml = productHtml.find('em', attrs={'title': 'Total Orders'})
         if ordersHtml is not None:
             ordersText = ordersHtml.text
             ordersAmount = supportFunctions.parseFirstNumber(ordersText)
@@ -15,8 +19,8 @@ class AliexpressProductAnalyzer(AbstractProductAnalyzer):
                 return int(ordersAmount)
         return 0
 
-    def _getPrice(self, articleSoup):
-        priceDiv = articleSoup.find('span', attrs={'class': 'value', 'itemprop': 'price'})
+    def _fetchPrice(self, productHtml):
+        priceDiv = productHtml.find('span', attrs={'class': 'value', 'itemprop': 'price'})
         text = priceDiv.text
         i = text.find("$")
         if i != -1:
